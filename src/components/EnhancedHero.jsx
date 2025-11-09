@@ -33,7 +33,7 @@ export default function EnhancedHero() {
   return (
     <section id="home" ref={ref} className="relative h-[90vh] min-h-[640px] w-full overflow-hidden">
       <motion.div style={{ y, scale }} className="absolute inset-0">
-        <Spline scene="https://prod.spline.design/GAomjSvthYZG1LLN/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+        <Spline scene="https://prod.spline.design/qQUip0dJPqrrPryE/scene.splinecode" style={{ width: '100%', height: '100%' }} />
       </motion.div>
 
       <div
@@ -50,7 +50,7 @@ export default function EnhancedHero() {
               Crafting interactive 3D experiences for the web
             </h1>
             <p className="mt-4 text-white/80 max-w-xl">
-              Web experiences with real-time 3D, motion, and accessibility first. Move your cursor and scroll to explore.
+              A modern, iridescent identity theme with real-time 3D, motion, and accessibility first. Move your cursor and scroll to explore.
             </p>
             <div className="mt-8 flex gap-3">
               <a
