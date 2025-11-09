@@ -1,93 +1,52 @@
-import { useRef, useState } from 'react';
-import Spline from '@splinetool/react-spline';
+import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import Spline from '@splinetool/react-spline';
 
 export default function ThreeShowcase() {
-  const sectionRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start center', 'end center'] });
-
-  // Scroll parallax for the canvas card
-  const yCanvas = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const yText = useTransform(scrollYProgress, [0, 1], [0, 40]);
-  const opacityText = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
-
-  // Mouse tilt for the canvas card
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const [size, setSize] = useState({ w: 1, h: 1 });
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
 
   const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-    setSize({ w: rect.width, h: rect.height });
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    const cx = (e.clientX - rect.left - rect.width / 2) / rect.width;
+    const cy = (e.clientY - rect.top - rect.height / 2) / rect.height;
+    const tiltX = cy * -6;
+    const tiltY = cx * 6;
+    const card = ref.current.querySelector('[data-tilt]');
+    if (card) card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+    const glow = ref.current.querySelector('[data-glow]');
+    if (glow) glow.style.background = `radial-gradient(600px circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, rgba(255,255,255,0.12), transparent 40%)`;
   };
 
-  const relX = (mouse.x - size.w / 2) / (size.w / 2 || 1);
-  const relY = (mouse.y - size.h / 2) / (size.h / 2 || 1);
+  const resetTilt = () => {
+    const card = ref.current?.querySelector('[data-tilt]');
+    if (card) card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+  };
 
   return (
-    <section ref={sectionRef} className="relative py-24">
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-10 items-stretch">
-          {/* 3D Card: uses a different Spline (credit card ripple) than the hero to avoid repetition */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6 }}
-            onMouseMove={handleMouseMove}
-            className="relative rounded-2xl overflow-hidden border border-white/10 bg-black/40"
-            style={{ height: 460 }}
-          >
-            <motion.div style={{ y: yCanvas, rotateX: relY * 4, rotateY: -relX * 4, transformStyle: 'preserve-3d' }} className="absolute inset-0 will-change-transform">
-              <Spline scene="https://prod.spline.design/gL1OurO-6gihUrEW/scene.splinecode" style={{ width: '100%', height: '100%' }} />
-            </motion.div>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-            {/* Cursor glow highlight */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background: 'radial-gradient(200px 200px at ' + mouse.x + 'px ' + mouse.y + 'px, rgba(99,102,241,0.12), transparent 60%)',
-              }}
-            />
-          </motion.div>
-
-          {/* Text column with scroll-coupled motion */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ y: yText, opacity: opacityText }}
-            className="flex flex-col justify-center"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">Tactile fintech canvas</h2>
-            <p className="mt-3 text-white/70 max-w-prose">
-              The finance-themed object floats over a liquid ripple. Move your cursor to gently tilt the scene and reveal a soft glow. As you scroll, the composition subtly shifts to guide attention.
+    <section id="projects" ref={ref} onMouseMove={handleMouseMove} onMouseLeave={resetTilt} className="relative py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="flex flex-col md:flex-row items-center gap-10">
+          <div className="md:w-1/2">
+            <h2 className="text-3xl md:text-4xl font-bold text-white">Featured Interactive Scene</h2>
+            <p className="mt-3 text-white/80">
+              A separate 3D composition demonstrates ripple and tilt interactions, distinct from the hero.
             </p>
-            <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-white/80">
-              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-indigo-400"></span> Cursor tilt + glow feedback</li>
-              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400"></span> Scroll-linked parallax</li>
-              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-cyan-400"></span> Non-blocking overlays</li>
-              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span> Responsive and performant</li>
+            <ul className="mt-6 space-y-2 text-white/70 list-disc list-inside">
+              <li>Smooth scroll parallax</li>
+              <li>Mouse‑driven tilt with soft glow</li>
+              <li>Optimized to avoid input glitches</li>
             </ul>
-            <div className="mt-6 flex gap-3">
-              <motion.a
-                href="#contact"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-5 py-3 rounded-md bg-white text-black font-semibold shadow-lg hover:shadow-xl transition"
-              >
-                Get in touch
-              </motion.a>
-              <motion.a
-                href="#projects"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-5 py-3 rounded-md bg-transparent ring-1 ring-white/30 text-white hover:bg-white/10 transition"
-              >
-                View more work
-              </motion.a>
+          </div>
+          <motion.div style={{ y, opacity }} className="md:w-1/2 relative">
+            <div data-tilt className="relative rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur will-change-transform transition-transform duration-150 ease-out">
+              <div className="absolute inset-0 pointer-events-none" data-glow />
+              <div className="h-[360px] md:h-[420px]">
+                <Spline scene="https://prod.spline.design/gL1OurO-6gihUrEW/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+              </div>
             </div>
           </motion.div>
         </div>
