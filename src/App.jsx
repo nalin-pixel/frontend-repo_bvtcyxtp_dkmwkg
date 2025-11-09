@@ -4,21 +4,23 @@ import ThreeShowcase from './components/ThreeShowcase';
 import Certificates from './components/Certificates';
 import Contact from './components/Contact';
 
-function App() {
+export default function App() {
   return (
-    <div className="min-h-screen bg-black text-white font-inter">
+    <div className="min-h-screen bg-[#0b0d10] text-white selection:bg-teal-300/30">
       <Navbar />
-      <main>
+
+      <main className="pt-16">
         <EnhancedHero />
         <ThreeShowcase />
         <Certificates />
         <Contact />
       </main>
-      <footer className="border-t border-white/10 py-8 text-center text-white/60 text-sm">
-        © {new Date().getFullYear()} • Built with React, Tailwind, Framer Motion, and Spline
+
+      <footer className="py-10 text-center text-sm text-white/60">
+        <p>
+          Built with React, Tailwind, Framer Motion, and Spline. Interact with the scenes using your mouse and scroll.
+        </p>
       </footer>
     </div>
   );
 }
-
-export default App;

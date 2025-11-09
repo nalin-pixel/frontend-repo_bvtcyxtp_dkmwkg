@@ -5,56 +5,57 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   const navItems = [
-    { href: '#home', label: 'Home' },
-    { href: '#projects', label: 'Projects' },
-    { href: '#certificates', label: 'Certificates' },
-    { href: '#contact', label: 'Contact' },
+    { label: 'Home', href: '#home' },
+    { label: 'Projects', href: '#projects' },
+    { label: 'Contact', href: '#contact' },
   ];
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 backdrop-blur bg-black/40 border-b border-white/10">
-      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <a href="#home" className="text-white font-semibold tracking-tight">My Portfolio</a>
+    <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-black/30 border-b border-white/10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <a href="#home" className="text-white font-semibold tracking-tight">
+            <span className="text-teal-300">/</span>Portfolio
+          </a>
 
-        <ul className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
-            <li key={item.href}>
+          <nav className="hidden md:flex items-center gap-8">
+            {navItems.map((item) => (
               <a
+                key={item.href}
                 href={item.href}
-                className="text-sm text-white/80 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded px-1"
+                className="text-sm text-white/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded px-1"
               >
                 {item.label}
               </a>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </nav>
 
-        <button
-          aria-label="Toggle menu"
-          className="md:hidden text-white/90 p-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </nav>
+          <button
+            className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-white/90 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+            aria-label="Toggle menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
 
-      {open && (
-        <div className="md:hidden border-t border-white/10 bg-black/70">
-          <ul className="px-4 py-3 space-y-2">
-            {navItems.map((item) => (
-              <li key={item.href}>
+        {open && (
+          <div className="md:hidden pb-4">
+            <div className="flex flex-col gap-2">
+              {navItems.map((item) => (
                 <a
+                  key={item.href}
                   href={item.href}
-                  className="block w-full text-left text-white/90 hover:text-white py-2"
                   onClick={() => setOpen(false)}
+                  className="block w-full rounded-md px-3 py-2 text-white/90 hover:text-white bg-white/5 hover:bg-white/10"
                 >
                   {item.label}
                 </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </header>
   );
 }
