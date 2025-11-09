@@ -1,6 +1,6 @@
 import Navbar from './components/Navbar';
 import EnhancedHero from './components/EnhancedHero';
-import ThreeShowcase from './components/ThreeShowcase';
+import Projects from './components/Projects';
 import Certificates from './components/Certificates';
 import Contact from './components/Contact';
 
@@ -11,7 +11,7 @@ export default function App() {
 
       <main className="pt-16">
         <EnhancedHero />
-        <ThreeShowcase />
+        <Projects />
         <Certificates />
         <Contact />
       </main>

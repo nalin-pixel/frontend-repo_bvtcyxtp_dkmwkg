@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import ResumeButton from './ResumeButton';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -28,6 +29,7 @@ export default function Navbar() {
                 {item.label}
               </a>
             ))}
+            <ResumeButton />
           </nav>
 
           <button
@@ -52,6 +54,9 @@ export default function Navbar() {
                   {item.label}
                 </a>
               ))}
+              <div className="px-3">
+                <ResumeButton />
+              </div>
             </div>
           </div>
         )}
